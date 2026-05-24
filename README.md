@@ -21,9 +21,21 @@ Entra en la carpeta del repositorio:
 cd ctf-git-42
 
 
-A partir de ahora, tienes un único comando mágico para controlarlo todo. Para recibir tu primera misión, y también para que el sensei evalúe tu trabajo cuando la termines, solo tendrás que ejecutar siempre:
+A partir de ahora, usarás la herramienta make para jugar:
 
-./git-gud
+Para iniciar el juego o abrir el menú interactivo:
+
+make run
+
+
+Para evaluar tu misión actual rápidamente:
+
+make check
+
+
+Para ver el mapa de tus ramas (Git Graph):
+
+make status
 
 
 ¡Suerte, Git Gud, y que la Norminette os acompañe!

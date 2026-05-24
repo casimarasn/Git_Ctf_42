@@ -1,0 +1,206 @@
+#!/bin/bash
+
+# Definición de colores
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+STATE_FILE=".ctf_state"
+
+if [ ! -f "$STATE_FILE" ]; then
+    STATE="0_START"
+else
+    STATE=$(cat "$STATE_FILE")
+fi
+
+# ==========================================
+# FUNCIONES PARA MOSTRAR INSTRUCCIONES
+# ==========================================
+
+show_lvl1() {
+    clear
+    echo -e "${BLUE}====================================================${NC}"
+    echo -e "${YELLOW}               <GIT/> CTF - 42 MÁLAGA                ${NC}"
+    echo -e "${BLUE}====================================================\n${NC}"
+    echo -e "¡Bienvenido! Has clonado el repositorio con éxito.\n"
+    
+    echo -e "${YELLOW}>> NIVEL 1: UNIVERSOS PARALELOS <<${NC}\n"
+    echo -e "Misión:"
+    echo -e "1. Crea una rama llamada ${GREEN}fix-norminette${NC} y sitúate en ella."
+    echo -e "2. Añade un comentario al final de ${GREEN}utils.c${NC} que diga: ${YELLOW}// fix norm${NC}"
+    echo -e "3. Registra este cambio en el historial de tu nueva rama."
+    echo -e "4. NO fusiones (merge) la rama todavía.\n"
+}
+
+show_lvl2() {
+    clear
+    echo -e "${YELLOW}>> NIVEL 2: EL CHOQUE DE TRENES (MERGE CONFLICT) <<${NC}\n"
+    echo -e "Misión:"
+    echo -e "1. Tu 'compañero' ha dejado cambios en la rama ${GREEN}compañero-rama${NC}."
+    echo -e "2. Tú tienes cambios distintos en la misma línea en tu rama (${GREEN}main${NC})."
+    echo -e "3. Intenta fusionar la rama de tu compañero en la tuya."
+    echo -e "4. ¡Conflicto! Ábrelo en tu editor, resuélvelo manualmente y completa la fusión.\n"
+}
+
+show_lvl3() {
+    clear
+    echo -e "${YELLOW}>> NIVEL 3: LA URGENCIA (GIT STASH) <<${NC}\n"
+    echo -e "Situación:"
+    echo -e "Estás a medias modificando el ${GREEN}Makefile${NC}."
+    echo -e "¡De repente avisan de un bug URGENTE en ${GREEN}utils.c${NC} que hay que arreglar!\n"
+    
+    echo -e "Misión:"
+    echo -e "1. Guarda tu trabajo del Makefile sin hacer commit (escóndelo en el 'cajón' temporal)."
+    echo -e "2. Añade al final de ${GREEN}utils.c${NC} lo siguiente: ${YELLOW}// Hotfix urgente aplicado${NC}"
+    echo -e "3. Registra ese hotfix con un commit."
+    echo -e "4. Saca tu trabajo del Makefile del cajón temporal para seguir por donde ibas.\n"
+}
+
+# ==========================================
+# FUNCIONES DE PREPARACIÓN DE ESCENARIOS
+# ==========================================
+
+setup_lvl1() {
+    STATE="1_PENDING"
+    echo "$STATE" > "$STATE_FILE"
+}
+
+setup_lvl2() {
+    clear
+    echo -e "${YELLOW}>> NIVEL 2: EL CHOQUE DE TRENES (MERGE CONFLICT) <<${NC}\n"
+    echo "El Sensei está preparando el escenario en la sombra..."
+    
+    cat <<EOF > main.c
+#include <unistd.h>
+int main(void) {
+    // TODO: iniciar variables
+    return (0);
+}
+EOF
+    git add main.c
+    git commit -m "Añadida estructura inicial" --quiet
+
+    git branch compañero-rama
+    git checkout compañero-rama --quiet
+    cat <<EOF > main.c
+#include <unistd.h>
+int main(void) {
+    // Variables inicializadas por tu compañero
+    return (0);
+}
+EOF
+    git add main.c
+    git commit -m "Compañero inicializa variables" --quiet
+
+    git checkout main --quiet
+    cat <<EOF > main.c
+#include <unistd.h>
+int main(void) {
+    // Variables inicializadas por mi
+    return (0);
+}
+EOF
+    git add main.c
+    git commit -m "Sensei inicializa variables" --quiet
+
+    echo -e "${GREEN}¡Escenario preparado!${NC}\n"
+    STATE="2_PENDING"
+    echo "$STATE" > "$STATE_FILE"
+    sleep 2
+}
+
+setup_lvl3() {
+    clear
+    echo -e "${YELLOW}>> NIVEL 3: LA URGENCIA (GIT STASH) <<${NC}\n"
+    echo "Preparando el escenario final..."
+    
+    echo -e "NAME = push_swap\nCC = gcc\nCFLAGS = -Wall -Wextra -Werror\n" > Makefile
+    git add Makefile
+    git commit -m "Añadido Makefile base" --quiet
+    echo -e "all: \$(NAME)\n" >> Makefile
+
+    echo -e "${GREEN}¡Escenario preparado!${NC}\n"
+    STATE="3_PENDING"
+    echo "$STATE" > "$STATE_FILE"
+    sleep 2
+}
+
+# ==========================================
+# GESTIÓN DEL ESTADO ACTUAL (AUTO-SETUP)
+# ==========================================
+if [ "$STATE" == "0_START" ]; then
+    setup_lvl1
+elif [ "$STATE" == "2_READY" ]; then
+    setup_lvl2
+elif [ "$STATE" == "3_READY" ]; then
+    setup_lvl3
+fi
+
+# ==========================================
+# FLUJO DEL GAME MASTER (MENÚ INTERACTIVO)
+# ==========================================
+
+while true; do
+    clear
+    
+    # Recargar estado por si el script ./check lo modificó en otra ventana
+    STATE=$(cat "$STATE_FILE" 2>/dev/null || echo "1_PENDING")
+    
+    echo -e "${BLUE}====================================================${NC}"
+    echo -e "${YELLOW}               <GIT/> CTF - 42 MÁLAGA                ${NC}"
+    echo -e "${BLUE}====================================================${NC}\n"
+    
+    if [ "$STATE" == "COMPLETED" ]; then
+        echo -e "${GREEN}¡🏆 Has completado el CTF! Eres un maestro de Git.${NC}\n"
+    else
+        echo -e "Estado actual: ${GREEN}Nivel en curso${NC}\n"
+    fi
+    
+    echo -e "Opciones disponibles:"
+    echo -e "  1) Ver misión actual"
+    echo -e "  2) Comprobar Nivel (Ejecutar Evaluador)"
+    echo -e "  3) Ver mi historial de Git (Árbol visual)"
+    echo -e "  4) Salir"
+    echo
+    
+    read -r -p "> Elige una opción: " choice
+    
+    case "$choice" in
+        1)
+            if [[ "$STATE" == "1_PENDING" || "$STATE" == "0_START" ]]; then show_lvl1; fi
+            if [[ "$STATE" == "2_PENDING" || "$STATE" == "2_READY" ]]; then show_lvl2; fi
+            if [[ "$STATE" == "3_PENDING" || "$STATE" == "3_READY" ]]; then show_lvl3; fi
+            if [[ "$STATE" == "COMPLETED" ]]; then echo -e "${GREEN}¡Misiones terminadas!${NC}"; fi
+            ;;
+        2)
+            clear
+            if [ -f "./check" ]; then
+                ./check
+                # Al comprobar, leemos el nuevo estado
+                STATE=$(cat "$STATE_FILE")
+                if [[ "$STATE" == "2_READY" ]]; then setup_lvl2; fi
+                if [[ "$STATE" == "3_READY" ]]; then setup_lvl3; fi
+            else
+                echo -e "${RED}Error: No se encuentra el archivo ./check${NC}"
+            fi
+            ;;
+        3)
+            clear
+            echo -e "${YELLOW}Historial de Git (Graph):${NC}"
+            git --no-pager log --graph --oneline --all
+            ;;
+        4)
+            clear
+            echo -e "${BLUE}¡Hasta pronto, Git Master!${NC}"
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Opción no válida.${NC}"
+            ;;
+    esac
+    
+    echo
+    read -n 1 -s -r -p "Presiona cualquier tecla para volver al menú..."
+done
