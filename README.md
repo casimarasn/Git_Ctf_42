@@ -9,7 +9,7 @@ Para empezar a jugar, sigue estos pasos:
 
 Haz un Fork de este repositorio (botón arriba a la derecha en GitHub). Esto creará una copia exacta en tu propia cuenta.
 
-Abre tu terminal.
+Abre tu terminal en tu Mac de 42.
 
 Haz un Clone de TU repositorio (el fork que acabas de crear, no el original del Sensei).
 
@@ -21,9 +21,9 @@ Entra en la carpeta del repositorio:
 cd ctf-git-42
 
 
-Ejecuta el script de inicio para recibir tu primera misión:
+A partir de ahora, tienes un único comando mágico para controlarlo todo. Para recibir tu primera misión, y también para que el sensei evalúe tu trabajo cuando la termines, solo tendrás que ejecutar siempre:
 
-./start.sh
+./git-gud
 
 
-¡Suerte, y que la Norminette os acompañe!
+¡Suerte, Git Gud, y que la Norminette os acompañe!
