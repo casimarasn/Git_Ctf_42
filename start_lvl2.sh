@@ -51,11 +51,9 @@ git commit -m "Sensei inicializa variables" --quiet
 
 echo -e "${GREEN}¡Escenario preparado!${NC}\n"
 echo -e "Misión:"
-echo -e "1. Tu compañero ha hecho cambios en la rama ${GREEN}compañero-rama${NC}."
+echo -e "1. Tu 'compañero' ha dejado cambios listos en la rama ${GREEN}compañero-rama${NC}."
 echo -e "2. Tú has hecho cambios en la misma línea en tu rama actual (${GREEN}main${NC})."
-echo -e "3. Ejecuta: ${YELLOW}git merge compañero-rama${NC}"
-echo -e "4. ¡Oh no! Git te avisará de un conflicto (CONFLICT). Abre ${GREEN}main.c${NC} en tu editor (VSCode o Vim)."
-echo -e "5. Borra las marcas de conflicto (<<<<, ====, >>>>) y deja la versión del código que prefieras."
-echo -e "6. Guarda el archivo, haz un ${GREEN}git add main.c${NC} y termina la fusión con ${GREEN}git commit${NC}.\n"
+echo -e "3. Intenta fusionar la rama de tu compañero en la tuya."
+echo -e "4. ¡Oh no, un conflicto! Git se ha hecho un lío. Ábrelo en tu editor de texto, resuélvelo manualmente (borrando las extrañas marcas de Git) y completa la fusión.\n"
 
-echo -e "Cuando hayas resuelto el conflicto y hecho el commit, ejecuta: ${BLUE}./check_lvl2.sh${NC}"
+echo -e "Cuando hayas resuelto el conflicto, ejecuta: ${BLUE}./check_lvl2.sh${NC}"

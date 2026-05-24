@@ -24,9 +24,9 @@ echo -e "Estás a medias modificando el ${GREEN}Makefile${NC} (haz un 'git statu
 echo -e "De repente, te avisan de un bug URGENTE en ${GREEN}utils.c${NC} que hay que arreglar ya de ya.\n"
 
 echo -e "Misión:"
-echo -e "1. Guarda tu trabajo a medias (del Makefile) sin hacer commit usando: ${YELLOW}git stash${NC}"
-echo -e "2. Abre ${GREEN}utils.c${NC} y añade al final: ${YELLOW}// Hotfix urgente aplicado${NC}"
-echo -e "3. Haz un ${GREEN}git add utils.c${NC} y un ${GREEN}git commit -m \"Hotfix en utils\"${NC}"
-echo -e "4. ¡Alivio! Ya has salvado el día. Ahora recupera tu trabajo del Makefile con: ${YELLOW}git stash pop${NC}\n"
+echo -e "1. No puedes hacer commit de un Makefile a medias. Guarda tu trabajo sin hacer commit (Pista: escóndelo en el 'cajón' temporal de Git)."
+echo -e "2. Arregla el bug abriendo ${GREEN}utils.c${NC} y añadiendo al final: ${YELLOW}// Hotfix urgente aplicado${NC}"
+echo -e "3. Registra ese hotfix con un commit."
+echo -e "4. ¡El día está salvado! Ahora, vuelve a sacar tu trabajo del Makefile del cajón temporal para seguir donde lo dejaste.\n"
 
-echo -e "Cuando hayas recuperado el Makefile, ejecuta: ${BLUE}./check_lvl3.sh${NC}"
+echo -e "Cuando tengas tu Makefile de vuelta, ejecuta: ${BLUE}./check_lvl3.sh${NC}"
